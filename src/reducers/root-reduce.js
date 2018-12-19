@@ -1,27 +1,25 @@
+import {updateObject} from '../store/utility/utility'
+
 const initialState={
     data:'something',
     arrays:[]
 }
 
-const reducer = ((state=initialState,action)=>{
+const deletePerson=(state,action)=>{
+    const newArr= state.arrays.filter(res=> res.first_name!=action.payload.first_name);
+    return updateObject(state,{arrays:newArr});
+}
 
+const reducer = ((state=initialState,action)=>{
     switch (action.type){
 
         case ("ADD"):
-           return{
-               arrays:state.arrays.concat(action.payload)
-           }
+               return updateObject(state,{arrays:state.arrays.concat(action.payload)});
         case ("DELETE"):
-           console.log("PAYLOAD DELETE",action.payload)
-          const newArr= state.arrays.filter(res=>{
-               return res.first_name!=action.payload.first_name
-           })
-           console.log("newArr",newArr)
-        return{ 
-            arrays:newArr
-        }    
+               return deletePerson(state,action)
+        case("FEED"):
+                return updateObject(state,{arrays:action.payload});
     }
-
     return state;
 });
 
